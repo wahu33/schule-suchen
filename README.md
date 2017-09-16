@@ -17,7 +17,7 @@ Für die Applikation werden folgende Frameworks verwendet:
 * leaflet-angular-directive
 * Bootstrap 4.0
 
-Demon
+Demo
 ======
 
-Eine Demo der Applikation befindet sich unter htts://bankerheide.de/schule-suchen
+Eine Demo der Applikation befindet sich unter https://bankerheide.de/schule-suchen
