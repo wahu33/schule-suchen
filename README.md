@@ -1,5 +1,23 @@
-# schule-suchen-angular
+# schule-suchen
 
-Schule suchen mit AngularJs. Unter Benutzung es Moduls von Jiri Kutcha
+Schule suchen NRW
+==========
 
- * https://github.com/jirikuchta/angular-szn-autocomplete
+Dies Applikation nutzt Schuldaten aus open.nrw, die dem Open-Data-Angebot des
+Ministeriums für Schule und Bildung NRW entstammen und  unter der Datenlizenz
+Deutschland Namensnennung 2.0. lizenziert sind.
+
+Die Daten können automatisch von den verfügbaren Quellen eingelesen werden. Dazu
+muss eine Datenbank mit der entsprechenden Datenstruktur zur Verfügung stehen.
+
+Für die Applikation werden folgende Frameworks verwendet:
+
+* AngularJs
+* Leaflet
+* leaflet-angular-directive
+* Bootstrap 4.0
+
+Demon
+======
+
+Eine Demo der Applikation befindet sich unter htts://bankerheide.de/schule-suchen
