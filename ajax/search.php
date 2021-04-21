@@ -38,4 +38,4 @@ if (strlen($q)>0)
 }
      $response = json_encode($result);
      echo '{"records":'.$response.'}';
-?>
+

@@ -49,8 +49,8 @@
 
           $arrSchulen[$i]['Schulnummer'] = $schulen['Schulnummer'];
           $arrSchulen[$i]['Gemeinde'] = $schulen['GemeindeBez'];
-          $numEasting=$schulen['KoordinatenRechtswert']/10;
-          $numNorthing=$schulen['KoordinatenHochwert']/10;
+          $numEasting=$schulen['KoordinatenRechtswert'];///10;Änderung 14.10.17
+          $numNorthing=$schulen['KoordinatenHochwert'];//10;Änderung 14.10.17
           list($numLat,$numLong)=calculate($numEasting,$numNorthing);
           $arrSchulen[$i]['latitude'] = $numLat;
           $arrSchulen[$i]['longitude'] = $numLong;
@@ -59,4 +59,3 @@
     }
     $response = json_encode($arrSchulen);
     echo $response;
- ?>

@@ -1,11 +1,11 @@
 <?php
-
   /* *******************************************************************
    * get_kurse.php
    * Kursdaten als JSON-Record
    * Walter Hupfeld
    * wh: 02.09.2017
    *********************************************************************/
+  
    header("Access-Control-Allow-Origin: *");
    header("Content-Type: application/json; charset=UTF-8");
    error_reporting(1);
@@ -40,4 +40,3 @@
            "gkq2":'.$responseGKQ2.',
            "lkq2":'.$responseLKQ2.'}';
 
- ?>

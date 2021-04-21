@@ -14,13 +14,10 @@
 
   $strGemeinde=(!empty($_GET)) ? $_GET['q'] : "";
 
-  $strSQL="select Schluessel,Bezeichnung
-      from $strGemeindeDB
-      where Bezeichnung like '%".$strGemeinde."%'
-      limit 30";
+  $stmt = $db->prepare("select Schluessel,Bezeichnung  from ".$strGemeindeDB.
+                       " where Bezeichnung like ?  limit 30");
+  $stmt->execute(array( '%'.$strGemeinde.'%' ));
 
-  $stmt=$db->query($strSQL);
   $arrGemeinde=$stmt->fetchAll(PDO::FETCH_ASSOC);
   $response = json_encode($arrGemeinde);
   echo '{"gemeinden":'.$response.'}';
- ?>

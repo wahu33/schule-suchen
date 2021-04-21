@@ -63,8 +63,8 @@
           $arrSchule['Betriebsdatum'] = $schulen['Schulbetriebsdatum'];
           $arrSchule['Traeger'] = $schulen['TraegerBez'];
           $arrSchule['Gemeinde'] = $schulen['GemeindeBez'];
-          $numEasting=$schulen['KoordinatenRechtswert']/10;
-          $numNorthing=$schulen['KoordinatenHochwert']/10;
+          $numEasting=$schulen['KoordinatenRechtswert'];#/10;Änderung 14.10.17
+          $numNorthing=$schulen['KoordinatenHochwert'];#/10;Änderung 14.10.17
           list($numLat,$numLong)=calculate($numEasting,$numNorthing);
           $arrSchule['latitude'] = $numLat;
           $arrSchule['longitude'] = $numLong;
@@ -72,4 +72,3 @@
     }
     $response = json_encode($arrSchule);
     echo $response;
- ?>

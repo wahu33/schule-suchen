@@ -26,4 +26,4 @@
   $arrBilingual=$stmt->fetchAll(PDO::FETCH_ASSOC);
   $response = json_encode($arrBilingual);
   echo '{"bilingual":'.$response.'}';
- ?>
+ 

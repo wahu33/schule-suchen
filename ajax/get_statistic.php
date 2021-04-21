@@ -48,4 +48,3 @@
     echo '{"sfstatistik":'.$responseSF.',"rfstatistik":'.$responseRF.'}';
 
 
- ?>

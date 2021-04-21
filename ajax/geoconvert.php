@@ -1,12 +1,17 @@
 <?php
 
+/* ***************************************
+* Funktion zur Umrechnung von Gauß-Krüger
+* in Breiten- und Längengerade
+* Walter Hupfeld (aus Quellen in Internet)
+**************************************** */
 
 function calculate($GKRight,$GKHeight) {
 
     //Falls nicht alle GK-Werte eingegeben wurden -> Meldung, Verlassen
     if (!(($GKRight > 1000000) && ( $GKHeight > 1000000)))
             {
-            echo("Es wurde kein gültiger Gauß-Krüger-Code eingegeben. Bitte überprüfen Sie Ihre Eingaben!");
+            //echo("Es wurde kein gültiger Gauß-Krüger-Code eingegeben. Bitte überprüfen Sie Ihre Eingaben!");
             return;
             }
     //$bII, $bf, $co, $g2, $g1, $t, $fa, $dl, $min, $sek, $rho,
@@ -120,5 +125,3 @@ echo $numLong;
 echo "<br>";
 echo $numLat;
 */
-
-?>

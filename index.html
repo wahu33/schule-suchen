@@ -1,357 +1,382 @@
 <!doctype html>
 <html lang="de">
+
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="Schule suchen in NRW, Datenbank mit sämtlichen Schulen aus NRW mit Adresse, Statusinformationen, Kursangeboten, Bilingualen Angeboten">
-  <meta name="author" content="Walter Hupfeld">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Schule suchen in NRW, Datenbank mit sämtlichen Schulen aus NRW mit Adresse, Statusinformationen, Kursangeboten, Bilingualen Angeboten">
+    <meta name="author" content="Walter Hupfeld">
 
-  <title>Schule suchen NRW</title>
+    <title>Schule suchen NRW</title>
 
-  <link rel="stylesheet" href="css/bootstrap.min.css">
-  <link rel="stylesheet" href="css/leaflet.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/leaflet.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/angular.min.js"></script>
+    <script src="js/leaflet.js"></script>
+    <script src="js/angular-leaflet-directive.min.js"></script>
 
-<style>
-  body {  min-height: 2000px; padding-top: 70px;}
-  .tabbable {width:100%;min-height:500px;}
-  .lab {display:block; float:left; width:9em; text-align: right; padding: 0 1em 0 0; font-weight:bold;}
-  .about {padding-top: 70px;}
-  .main  {background-color:#f5fff5;}
-  .statistik tr td {font-size: 15px; padding:4px;}
-  .hint  {font-size:10px;}
-  .mylistgroup {padding:4px 0 4px 10px;font-size:12px;cursor:pointer;}
-  .mycardheader {cursor:pointer;}
-  .searchlabel {color:gray;}
-  .legend {
-      font: 14px/16px Arial, Helvetica, sans-serif;
-      background: rgba(255,255,255, 0.9);
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
-      border-radius: 5px;
-      padding: 6px 8px;
-      width: 160px;
-      line-height: 18px;
-      color: #555;
-}
-.legend i {
-      width: 16px;
-      height: 16px;
-      float: left;
-      margin-right: 8px;
-      opacity: 0.7;
-}
-</style>
+    <link rel='stylesheet' href='js/loading-bar.min.css' type='text/css' media='all' />
+    <script type='text/javascript' src='js/loading-bar.min.js'></script>
+
+    <script src="js/app.js"></script>
 </head>
 
 <body>
-<!--  Navbar -->
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-  <a class="navbar-brand" href="#">Schulen in NRW</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbars" aria-controls="navbars" aria-expanded="false" aria-label="Toggle navigation">
+    <!--  Navbar -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="#">Schulen in NRW</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbars" aria-controls="navbars" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-    <div class="collapse navbar-collapse" id="navbars">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#about">Über</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#contact">Impressum/Kontakt</a>
-      </li>
-    </ul>
-  </div>
-</nav>
-<!-- Ende Navbar -->
+        <div class="collapse navbar-collapse" id="navbars">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">Über</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#contact">Impressum/Kontakt</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <!-- Ende Navbar -->
 
-<div class="container main">
-<div ng-app="myApp" ng-controller="customersCtrl">
+    <div class="container main">
+        <div ng-app="myApp" ng-controller="customersCtrl">
 
-<div class="row">
-    <div class="col-sm"><h2>Schulen in NRW</h2></div>
-</div>
-<div class="row">
-<!-- Linke Spalte -->
-    <div class="col-sm-8">
+            <div class="row">
+                <div class="col-sm">
+                    <h2>Schulen in NRW</h2>
+                </div>
+            </div>
+            <div class="row">
+                <!-- Linke Spalte -->
+                <div class="col-sm-8">
 
-<!-- Suchfelder -->
-<div class="row">
-  <div class="col-lg-7">
-    <div class="input-group">
-      <span class="input-group-btn">
+                    <!-- Suchfelder -->
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <div class="input-group">
+                                <span class="input-group-btn">
         <button class="btn btn-secondary" type="button">Schule</button>
       </span>
-      <input ng-model="searchstr" ng-change="search()" class="form-control" placeholder="Schulname PLZ Ort Schulnummer">
-    </div>
-  </div>
-  <div class="col-lg-5">
-    <div class="input-group">
-      <span class="input-group-btn">
+                                <input ng-model="searchstr" ng-change="search()" class="form-control ng-cloak" placeholder="Schulname PLZ Ort Schulnummer">
+                            </div>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="input-group">
+                                <span class="input-group-btn">
         <button class="btn btn-secondary" type="button">Gemeinde</button>
       </span>
-      <input ng-model="searchgmstr" ng-change="searchgm()" class="form-control" placeholder="Stadt/Gemeinde">
-    </div>
-  </div>
-</div>
-<!-- Ende Suchfelder -->
+                                <input ng-model="searchgmstr" ng-change="searchgm()" class="form-control ng-cloak" placeholder="Stadt/Gemeinde">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Ende Suchfelder -->
 
-<!-- Ergebnislisten -->
-<div class="row">
-  <div class="col-lg-7">
-    <div ng-hide="schule" class="list-group">
-      <a  class="list-group-item" href="#"
-          ng-repeat="x in names | orderBy : 'Schulnummer'"
-          ng-click="show(x.Schulnummer);statistik(0)">
+                    <!-- Startseite -->
+
+                    <div ng-show="start" class="jumbotron">
+                        <h1 class="display-6">Schulen in Nordrhein-Westfalen</h1>
+                        <div class="container">
+                            <p class="lead">Hier können Sie in der Datenbank aller nordrhein-westfälischen Schulen suchen.</p>
+                            <hr class="my-4">
+                            <p>Finden Sie etweder eine Schule durch Eingabe von Schulname, Ort, PLZ oder Schulnummer.</p>
+                            <p>Oder lassen Sie sich alle Schulen einer Gemeinde anzeigen.</p>
+                            <p>Sie erhalten die Grunddaten der Schule wie Adresse, Telefon, Homepage, Schülerzahlen und bilinguale Angebote und bei Gymnasien auch die Kursangebote in der gymnasialen Oberstufe. Außerdem können Sie die Schule auf der Karte
+                                lokalisieren.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Ende Startseite -->
+
+
+                    <!-- Ergebnislisten -->
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <div ng-hide="schule" class="list-group">
+                                <a class="list-group-item" href="#" ng-repeat="x in names | orderBy : 'Schulnummer'" ng-click="show(x.Schulnummer);statistik(0)">
         {{ x.Schulnummer }}
         {{ x.Schulbezeichnung_1 }}
         {{ x.PLZ + " " + x.Ort }}
       </a>
-    </div>
-  </div>
+                            </div>
+                        </div>
 
-  <div class="col-lg-5">
-    <div ng-hide="gem_schulen" class="list-group">
-      <a  class="list-group-item" href="#"
-          ng-repeat="x in gemeinden | orderBy : 'Bezeichung'"
-          ng-click="showgm(x.Schluessel);statistik(x.Schluessel)">
+                        <div class="col-lg-5">
+                            <div ng-hide="gem_schulen" class="list-group">
+                                <a class="list-group-item" href="#" ng-repeat="x in gemeinden | orderBy : 'Bezeichung'" ng-click="showgm(x.Schluessel);statistik(x.Schluessel)">
         {{ x.Bezeichnung }}
       </a>
-    </div>
-  </div>
-</div>
-<!-- Ergebnislisten -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Ergebnislisten -->
 
-<br><br>
+                    <br><br>
 
-<!-- Karteikasten Schulinformation -->
-<div ng-show="schule">
-<h3>{{schule.Kurzbezeichnung}}</h3>
-<div class="tabbable" ng-init="selectedTab = 1;">
-    <ul class="nav nav-tabs" role="tablist"> <!-- nav-justified -->
-        <li class="nav-item" >
-            <a class="nav-link" ng-class="{active: selectedTab == 1}" href="#" ng-click="selectedTab = 1;">Schuldaten</a>
-        </li>
-        <li class="nav-item" ng-show="schule.sf==20 || schule.sf==15">
-            <a class="nav-link" ng-class="{active: selectedTab == 2}" href="#" ng-click="selectedTab = 2;kursangebot(schule.Schulnummer)">Kursangebot</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" ng-class="{active: selectedTab == 3}" href="#" ng-click="selectedTab = 3;">Status</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" ng-class="{active: selectedTab == 4}" href="#" ng-click="selectedTab = 4;">Karte</a>
-        </li>
-    </ul>
+                    <!-- Karteikasten Schulinformation -->
+                    <div ng-show="schule">
+                        <h3>{{schule.Kurzbezeichnung}}</h3>
+                        <div class="tabbable" ng-init="selectedTab = 1;">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <!-- nav-justified -->
+                                <li class="nav-item">
+                                    <a class="nav-link" ng-class="{active: selectedTab == 1}" href="#" ng-click="selectedTab = 1;">Schuldaten</a>
+                                </li>
+                                <li class="nav-item" ng-show="schule.sf==20 || schule.sf==15">
+                                    <a class="nav-link" ng-class="{active: selectedTab == 2}" href="#" ng-click="selectedTab = 2;kursangebot(schule.Schulnummer)">Kursangebot</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" ng-class="{active: selectedTab == 3}" href="#" ng-click="selectedTab = 3;">Status</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" ng-class="{active: selectedTab == 4}" href="#" ng-click="selectedTab = 4;">Karte</a>
+                                </li>
+                            </ul>
 
-        <div class="tab-pane" ng-show="selectedTab == 1">
-          <div class="card">
+                            <div class="tab-pane" ng-show="selectedTab == 1">
+                                <div class="card">
 
-            <div class="card-body">
-                 <h4 class="card-title">Schuladresse</h4>
-                   <div><span class="lab">Name:</span> {{schule.Schulbezeichnung_1}}</div>
-                   <div ng-show="schule.Schulbezeichnung_2"><span class="lab">&nbsp;</span> {{schule.Schulbezeichnung_2}}</div>
-                   <div ng-show="schule.Schulbezeichnung_3"><span class="lab">&nbsp;</span> {{schule.Schulbezeichnung_3}}</div>
-                   <div><span class="lab">Straße:</span> {{schule.Strasse}}</div>
-                   <div><span class="lab">Ort:</span> {{schule.PLZ}} {{schule.Ort}}</div>
-                   <div><span class="lab">Telefon:</span> {{schule.Telefon}}</div>
-                   <div><span class="lab">Fax:</span> {{schule.Fax}}</div>
-                   <div><span class="lab">E-Mail:</span> {{schule.Email}}</div>
-                   <div ng-show="schule.Homepage"><span class="lab">Homepage:</span> <a href="{{schule.Homepage}}" target="_blank">{{schule.Homepage}}</a></div>
-                  <br>
-                <h4>Schülerzahlen</h4>
-                  <div><span class="lab">Schülerzahl:</span> {{schule.Schuelerzahl}}</div>
-                <div ng-show="bilingual.length>0">
-                  <br>
-                  <h4>Bilinguales Angebot</h4>
-                  <div ng-repeat="x in bilingual"><span class="lab">{{x.U_Sprache_Text}}</span>{{x.Fachtext}}</div>
-                </div>
-            </div>
-          </div>
-        </div>
+                                    <div class="card-body">
+                                        <h4 class="card-title">Schuladresse</h4>
+                                        <div><span class="lab">Name:</span> {{schule.Schulbezeichnung_1}}</div>
+                                        <div ng-show="schule.Schulbezeichnung_2"><span class="lab">&nbsp;</span> {{schule.Schulbezeichnung_2}}</div>
+                                        <div ng-show="schule.Schulbezeichnung_3"><span class="lab">&nbsp;</span> {{schule.Schulbezeichnung_3}}</div>
+                                        <div><span class="lab">Straße:</span> {{schule.Strasse}}</div>
+                                        <div><span class="lab">Ort:</span> {{schule.PLZ}} {{schule.Ort}}</div>
+                                        <div><span class="lab">Telefon:</span> {{schule.Telefon}}</div>
+                                        <div><span class="lab">Fax:</span> {{schule.Fax}}</div>
+                                        <div><span class="lab">E-Mail:</span> {{schule.Email}}</div>
+                                        <div ng-show="schule.Homepage"><span class="lab">Homepage:</span> <a href="{{schule.Homepage}}" target="_blank">{{schule.Homepage}}</a></div>
+                                        <br>
+                                        <div ng-show="fsp.length>0">
+                                            <br>
+                                            <h4>Förderschwerpunkte</h4>
+                                            <div ng-repeat="x in fsp"><span class="lab">&nbsp;</span>{{x.FSPtext}}</div>
+                                            <br>
+                                        </div>
 
-        <div class="tab-pane" ng-show="selectedTab == 2">
-            <div class="card card-default">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-lg-6">
-                    <h4>Grundkurse Einführungsphase</h4>
-                    <ul><li ng-repeat="x in gkef">{{x}}</li></ul>
-                  </div>
-                  <div class="col-lg-6">
-                    &nbsp;
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-lg-6">
-                    <h4>Grundkurse Qualifizierungsphase 1</h4>
-                    <ul><li ng-repeat="x in gkq1">{{x}}</li></ul>
-                  </div>
-                  <div class="col-lg-6">
-                    <h4>Grundkurse Qualifizierungsphase 2</h4>
-                    <ul><li ng-repeat="x in gkq2">{{x}}</li></ul>
-                  </div>
-                </div>
+                                        <h4>Schülerzahlen</h4>
+                                        <div><span class="lab">Schülerzahl:</span> {{schule.Schuelerzahl}}</div>
 
-                <div class="row">
-                  <div class="col-lg-6">
-                    <h4>Leistungskurse Qualifizierungsphase 1</h4>
-                    <ul><li ng-repeat="x in lkq1 | orderBy: 'x'">{{x}}</li></ul>
-                  </div>
-                  <div  class="col-lg-6">
-                    <h4>Leistungskurse Qualifizierungsphase 2</h4>
-                    <ul><li ng-repeat="x in lkq2 | orderBy: 'x'">{{x}}</li></ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-        </div>
+                                        <div ng-show="bilingual.length>0">
+                                            <br>
+                                            <h4>Bilinguales Angebot</h4>
+                                            <div ng-repeat="x in bilingual"><span class="lab">{{x.U_Sprache_Text}}</span>{{x.Fachtext}}</div>
+                                            <br>
+                                        </div>
 
-        <div class="tab-pane" ng-show="selectedTab == 3">
-            <div class="card card-default">
-              <div class="card-body">
-                <div><span class="lab">Schulnummer:</span> {{schule.Schulnummer}}</div>
-                <div><span class="lab">Schulform:</span> {{schule.Schulformbezeichnung}}</div>
-                <div><span class="lab">Betriebsdatum:</span> {{schule.Betriebsdatum}}</div>
-                <div><span class="lab">Schulbetrieb:</span> {{schule.Schulbetrieb}}</div>
-                <div><span class="lab">Schulträger:</span> {{schule.Traeger}}</div>
-                <div><span class="lab">Gemeinde:</span> {{schule.Gemeinde}}</div>
-              </div>
-            </div>
-        </div>
+                                        <div ng-show="ik.length>0">
+                                            <br>
+                                            <h4>Internationale Kontakte</h4>
+                                            <div ng-repeat="x in ik"><span class="lab">&nbsp;</span>{{x.Landtext}}</div>
+                                            <br>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-        <div class="tab-pane" ng-show="selectedTab == 4">
-          <div class="card card-default">
-            <div class="card-body">
-               <leaflet center="center" markers="markers" width="100%" height="480px"></leaflet>
-            </div>
-           </div>
-          </div>
-    </div>
-  </div>
-<!-- /Karteikaten Schulinformation -->
+                            <div class="tab-pane" ng-show="selectedTab == 2">
+                                <div class="card card-default">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <h4>Grundkurse Einführungsphase</h4>
+                                                <ul>
+                                                    <li ng-repeat="x in gkef">{{x}}</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                &nbsp;
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <h4>Grundkurse Qualifizierungsphase 1</h4>
+                                                <ul>
+                                                    <li ng-repeat="x in gkq1">{{x}}</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <h4>Grundkurse Qualifizierungsphase 2</h4>
+                                                <ul>
+                                                    <li ng-repeat="x in gkq2">{{x}}</li>
+                                                </ul>
+                                            </div>
+                                        </div>
 
-<!--
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <h4>Leistungskurse Qualifizierungsphase 1</h4>
+                                                <ul>
+                                                    <li ng-repeat="x in lkq1 | orderBy: 'x'">{{x}}</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <h4>Leistungskurse Qualifizierungsphase 2</h4>
+                                                <ul>
+                                                    <li ng-repeat="x in lkq2 | orderBy: 'x'">{{x}}</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane" ng-show="selectedTab == 3">
+                                <div class="card card-default">
+                                    <div class="card-body">
+                                        <div><span class="lab">Schulnummer:</span> {{schule.Schulnummer}}</div>
+                                        <div><span class="lab">Schulform:</span> {{schule.Schulformbezeichnung}}</div>
+                                        <div><span class="lab">Betriebsdatum:</span> {{schule.Betriebsdatum}}</div>
+                                        <div><span class="lab">Schulbetrieb:</span> {{schule.Schulbetrieb}}</div>
+                                        <div><span class="lab">Schulträger:</span> {{schule.Traeger}}</div>
+                                        <div><span class="lab">Gemeinde:</span> {{schule.Gemeinde}}</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane" ng-show="selectedTab == 4">
+                                <div class="card card-default">
+                                    <div class="card-body">
+                                        <leaflet center="center" markers="markers" width="100%" height="480px"></leaflet>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Karteikaten Schulinformation -->
+
+                    <!--
 <table  class="table table-striped">
   <tr ng-repeat="(bez,val) in schule"><td>{{bez}}: </td><td>{{val}}</td></tr>
 </table>
 -->
 
-<!-- Anzeige der Schulen einer Gemeinde -->
+                    <!-- Anzeige der Schulen einer Gemeinde -->
 
-  <div ng-show="gem_schulen && ! schule">
-    <h3>{{gem_schulen[1].Ort}}</h3>
-    <div class="card card-default">
-      <div class="card-body">
-         <leaflet bounds="bounds" legend="legend" markers="markers" width="100%" height="480px"></leaflet>
-      </div>
-     </div>
+                    <div ng-show="gem_schulen && ! schule">
+                        <h3>{{gem_schulen[1].Ort}}</h3>
+                        <div class="card card-default">
+                            <div class="card-body">
+                                <leaflet bounds="bounds" legend="legend" markers="markers" width="100%" height="480px"></leaflet>
+                            </div>
+                        </div>
 
-  </div>
-<!-- /Anzeige der Schulen einer Gemeinde -->
-</div> <!-- linke Spalte -->
+                    </div>
+                    <!-- /Anzeige der Schulen einer Gemeinde -->
+                </div>
+                <!-- linke Spalte -->
 
-<!-- Rechte Spalte -->
-  <div class="col-sm-4">
+                <!-- Rechte Spalte -->
+                <div class="col-sm-4">
 
-    <div ng-show="gem_schulen">
-    <h4>Schulen in {{gem_schulen[1].Ort}}</h4>
+                    <div ng-show="gem_schulen">
+                        <h4>Schulen in {{gem_schulen[1].Ort}}</h4>
 
-       <div class="card" ng-repeat="sform in anzSchulen">
-          <div ng-click="collapse=!collapse" class="card-header mycardheader dropdown-toggle">
-           {{sform.Schulform}}
+                        <div class="card" ng-repeat="sform in anzSchulen">
+                            <div ng-click="collapse=!collapse" class="card-header mycardheader dropdown-toggle">
+                                {{sform.Schulform}}
 
-           </div>
-          <ul ng-show="collapse" class="list-group">
-            <li class="list-group-item list-group-item-action mylistgroup"
-                  ng-repeat="x in gem_schulen | array | filter:sform.Schulform" ng-click="show(x.Schulnummer)">
-                    <div>{{x.Schulbezeichnung_1}}</div>
-                    <div ng-show(x.Schulbezeichnung_2)>{{x.Schulbezeichnung_2}}</div>
-                    <div ng-show(x.Schulbezeichnung_3)>{{x.Schulbezeichnung_3}}</div>
-            </li>
-          </ul>
-      </div>
+                            </div>
+                            <ul ng-show="collapse" class="list-group">
+                                <li class="list-group-item list-group-item-action mylistgroup" ng-repeat="x in gem_schulen | array | filter:sform.Schulform" ng-click="kursangebot(schule.Schulnummer);show(x.Schulnummer)">
+                                    <div>{{x.Schulbezeichnung_1}}</div>
+                                    <div ng-show(x.Schulbezeichnung_2)>{{x.Schulbezeichnung_2}}</div>
+                                    <div ng-show(x.Schulbezeichnung_3)>{{x.Schulbezeichnung_3}}</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <br>
+                    <h4>Schulformen</h4>
+                    <div class="hint">Anzahl Schulen und Schülerzahlen</div>
+                    <table class="table table-striped statistik" ng-init="statistik(0)">
+                        <tr ng-repeat="x in anzSchulen">
+                            <td>{{x.Schulform}}</td>
+                            <td class="text-right">{{x.Anzahl | number}}</td>
+                            <td class="text-right">{{x.SAnzahl | number}}</td>
+                        </tr>
+                    </table>
+
+                    <h4>Rechtsformen</h4>
+                    <table class="table table-striped statistik">
+                        <tr ng-repeat="x in rechtsformen">
+                            <td>{{x.Rechtsform}}</td>
+                            <td class="text-right">{{x.Anzahl | number}}</td>
+                            <td class="text-right">{{x.SAnzahl | number}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- rechte Spalte -->
+            </div>
+            <!-- Zeile -->
+        </div>
+        <!-- Controller -->
+    </div>
+    <!-- container -->
+
+
+    <div id="about" class="container about">
+        <h3>Über</h3>
+        <p>Die in dieser Applikation verwendeten Daten entstammen dem Open-Data-Angebot des
+            <a href="https://www.schulministerium.nrw.de/docs/bp/Ministerium/Open_MSB/Open_Data/" target="_blank">
+      Ministeriums für Schule und Bildung NRW</a><br> und sind lizenziert unter der
+            <a href="https://www.govdata.de/dl-de/by-2-0" target="_blank">Datenlizenz Deutschland Namensnennung 2.0</a>.
+        </p>
+
+        <p>Bei der Entwicklung der App wurden folgende Bibliotheken verwendet:
+            <ul>
+                <li><a href="https://angularjs.org/" target="_blank">AngularJS 1.6.4</a></li>
+                <li><a href="http://leaflet.org" target="_blank">Leaflet</a></li>
+                <li><a href="http://tombatossals.github.io/angular-leaflet-directive" target="_blank">angular-leaflet-directive</a>
+                    <li><a href="http://getbootstrap.com/" target="_blank">Bootstrap 4.0</a></li>
+            </ul>
+        </p>
     </div>
 
-   <br>
-   <h4>Schulformen</h4>
-   <div class="hint">Anzahl Schulen und Schülerzahlen</div>
-     <table class="table table-striped statistik" ng-init="statistik(0)">
-       <tr ng-repeat="x in anzSchulen">
-           <td>{{x.Schulform}}</td>
-           <td class="text-right">{{x.Anzahl | number}}</td>
-           <td class="text-right">{{x.SAnzahl | number}}</td>
-       </tr>
-     </table>
 
-     <h4>Rechtsformen</h4>
-     <table class="table table-striped statistik">
-       <tr ng-repeat="x in rechtsformen">
-           <td>{{x.Rechtsform}}</td>
-           <td class="text-right">{{x.Anzahl | number}}</td>
-           <td class="text-right">{{x.SAnzahl | number}}</td>
-       </tr>
-      </table>
-  </div> <!-- rechte Spalte -->
-</div> <!-- Zeile -->
-</div> <!-- Controller -->
-</div> <!-- container -->
+    <div id="contact" class="container about">
+        <h3>Impressum/Kontakt</h3>
+        <p>
+            Walter Hupfeld<br> Bankerheide 2<br> 59065 Hamm<br>
+            <br> Walter@Hupfeld-Hamm.de
+        </p>
+        <p>
+            Weiter Informationen zu diesem Projekt werden demnächst unter
+            <a href="https://www.walterhupfeld.de" target="_blank">www.walterhupfeld.de</a> veröffentlicht.
+        </p>
+    </div>
 
 
-<div id="about" class="container about">
-  <h3>Über</h3>
-  <p>Die in dieser Applikation verwendeten Daten entstammen dem Open-Data-Angebot des
-    <a href="https://www.schulministerium.nrw.de/docs/bp/Ministerium/Open_MSB/Open_Data/" target="_blank">
-      Ministeriums für Schule und Bildung NRW</a><br>
-      und sind lizenziert unter der
-      <a href="https://www.govdata.de/dl-de/by-2-0" target="_blank">Datenlizenz Deutschland Namensnennung 2.0</a>.
-  </p>
-
-  <p>Bei der Entwicklung der App wurden folgende Bibliotheken verwendet:
-    <ul>
-    <li><a href="https://angularjs.org/" target="_blank">AngularJS 1.6.4</a></li>
-    <li><a href="http://leaflet.org" target="_blank">Leaflet</a></li>
-    <li><a href="http://tombatossals.github.io/angular-leaflet-directive" target="_blank">angular-leaflet-directive</a>
-    <li><a href="http://getbootstrap.com/" target="_blank">Bootstrap 4.0</a></li>
-    </ul>
-  </p>
-</div>
-
-
-<div id="contact" class="container about">
-  <h3>Impressum/Kontakt</h3>
-  <p>
-    Walter Hupfeld<br>
-    Bankerheide 2<br>
-    59065 Hamm<br>
-    <br>
-    Walter@Hupfeld-Hamm.de
-  </p>
-  <p>
-    Weiter Informationen zu diesem Projekt werden demnächst unter
-    <a href="https://www.walterhupfeld.de" target="_blank">www.walterhupfeld.de</a>
-    veröffentlicht.
-  </p>
-</div>
-
-<script src="js/angular.min.js"></script>
-<script src="js/leaflet.js"></script>
-<script src="js/angular-leaflet-directive.min.js"></script>
-<script src="js/app.js"></script>
-
-<!-- Piwik -->
-<script type="text/javascript">
-  var _paq = _paq || [];
-  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-  (function() {
-    var u="//bankerheide.de/piwik/";
-    _paq.push(['setTrackerUrl', u+'piwik.php']);
-    _paq.push(['setSiteId', '9']);
-    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-  })();
-</script>
-<!-- End Piwik Code -->
+    <!-- Piwik -->
+    <script type="text/javascript">
+        var _paq = _paq || [];
+        /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
+        (function() {
+            var u = "//bankerheide.de/piwik/";
+            _paq.push(['setTrackerUrl', u + 'piwik.php']);
+            _paq.push(['setSiteId', '9']);
+            var d = document,
+                g = d.createElement('script'),
+                s = d.getElementsByTagName('script')[0];
+            g.type = 'text/javascript';
+            g.async = true;
+            g.defer = true;
+            g.src = u + 'piwik.js';
+            s.parentNode.insertBefore(g, s);
+        })();
+    </script>
+    <!-- End Piwik Code -->
 </body>
+
 </html>
